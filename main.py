@@ -84,7 +84,7 @@ def create_database_tables():
                         cems_phone INTEGER,
                         industry_representative_email TEXT,
                         completed_stacks INTEGER DEFAULT 0,
-                        FOREIGN KEY (user_id) REFERENCES user (id)
+                        FOREIGN KEY (user_id) REFERENCES user_as (id)
                     )
                 ''')
         # Stacks Table
@@ -117,7 +117,7 @@ def create_database_tables():
                         parameters TEXT,
                         number_params INTEGER DEFAULT 0,
                         completed_parameters INTEGER DEFAULT 0,
-                        FOREIGN KEY (user_id) REFERENCES industry (ind_id)
+                        FOREIGN KEY (user_id) REFERENCES industry_as (ind_id)
                     )
                 ''')
         # CEMS Instruments Table
@@ -142,7 +142,7 @@ def create_database_tables():
                         bspcb_url TEXT,
                         cpcb_url TEXT,
                         connected_cpcb TEXT,
-                        FOREIGN KEY (stack_id) REFERENCES stacks (stack_id)
+                        FOREIGN KEY (stack_id) REFERENCES stacks_as (stack_id)
                     )
                 ''')  # Keep the existing table creation code as is
         conn.commit()
