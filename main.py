@@ -8,9 +8,9 @@ import pandas as pd
 
 
 # Utility Functions
-def hash_password(password):
-    """Hashes the password using SHA-256."""
-    return hashlib.sha256(password.encode()).hexdigest()
+# def hash_password(password):
+#     """Hashes the password using SHA-256."""
+#     return hashlib.sha256(password.encode()).hexdigest()
 
 
 def is_valid_email(email):
