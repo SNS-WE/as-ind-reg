@@ -265,6 +265,7 @@ def refresh_page():
 
 st.set_page_config(layout="wide")
 def redirect_login():
+    refresh_page()
     if not st.session_state["logged_in"] and not st.session_state["admin_logged_in"]:
             st.sidebar.title("User Login")
             navigation = ["Industry Login/New Industry Registration","Admin Login"]
