@@ -276,10 +276,10 @@ def redirect_login():
             if selected_page == "Industry Login/New Industry Registration":
                 st.subheader("Login")
 
-                    # Login form
-                    email = st.text_input("Industry Representative Email Id")
-                    password = st.text_input("Password", type="password")
-                    login_button = st.button("Login")
+                # Login form
+                email = st.text_input("Industry Representative Email Id")
+                password = st.text_input("Password", type="password")
+                login_button = st.button("Login")
 
                     if login_button:
                         try:
