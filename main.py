@@ -254,7 +254,7 @@ dist_dict = {"Andaman And Nicobar Islands": ["Nicobars","North And Middle Andama
                             "Sant Kabir Nagar","Shahjahanpur","Shamli","Shrawasti","Siddharthnagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi"],
             "West Bengal": ["Alipurduar","Bankura","Birbhum","Cooch Behar","Dakshin Dinajpur","Darjeeling","Hooghly","Howrah","Jalpaiguri","Jhargram",
                           "Kalimpong","Kolkata","Malda","Murshidabad","Nadia","North 24 Parganas","Paschim Bardhaman","Paschim Medinipur","Purba Bardhaman",
-                          "Purba Medinipur","Purulia","South 24 Parganas","Uttar Dinajpur"],
+                          "Purba Medinipur","Purulia","South 24 Parganas","Uttar Dinajpur"]}
 
 
 def refresh_page():
