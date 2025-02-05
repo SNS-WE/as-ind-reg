@@ -1249,7 +1249,8 @@ def fill_cems_details(user_id):
             st.session_state[f"form_reset_{selected_stack_id}"] = False  # Prevent reset on error
 
 
-# Main Function    
+# Main Function
+def main()
     hide_streamlit_style = """
     <style>
         /* Hide the Streamlit header and hamburger menu */
