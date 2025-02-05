@@ -1260,17 +1260,17 @@ def main():
     </style>
     """
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-    reduce_top_margin_style = """
-    <style>
-        /* Adjust the margins of the main page */
-        .block-container {
-            padding-top: 2rem;
-            padding-left: 1rem; 
-            padding-right: 1rem; 
-        }
-    </style>
-    """
-    st.markdown(reduce_top_margin_style, unsafe_allow_html=True)
+    # reduce_top_margin_style = """
+    # <style>
+    #     /* Adjust the margins of the main page */
+    #     .block-container {
+    #         padding-top: 2rem;
+    #         padding-left: 1rem; 
+    #         padding-right: 1rem; 
+    #     }
+    # </style>
+    # """
+    # st.markdown(reduce_top_margin_style, unsafe_allow_html=True)
 
     #st.image("banner3.jpg", caption=None, use_container_width=True)
     
