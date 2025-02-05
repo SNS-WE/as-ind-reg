@@ -1251,7 +1251,7 @@ def fill_cems_details(user_id):
 
 # Main Function
 def main():
-    # hide_streamlit_style = """
+    hide_streamlit_style = """
     <style>
         /* Hide the Streamlit header and hamburger menu */
         #MainMenu {visibility: hidden;}
