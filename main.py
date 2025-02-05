@@ -1393,7 +1393,7 @@ def main():
                                 c = conn.cursor()
 
                                 # Insert user (with email used for login)
-                                hashed_password = hash_password(password)
+                                hashed_password = password
                                 c.execute("INSERT INTO user_as (email, password) VALUES (?, ?)", (email, hashed_password))
                                 user_id = c.lastrowid
                                 conn.commit()
