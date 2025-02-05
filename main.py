@@ -1411,10 +1411,7 @@ def main():
                                            inst_phone, concerned_person_cems, cems_phone, email))
                                 conn.commit()
                                 conn.close()
-
                                 st.success("Industry registered successfully!")
-                            
-            
                             except sqlite3.IntegrityError:
                                 st.error("This email is already registered. Please use a different email.")
                             except Exception as e:
