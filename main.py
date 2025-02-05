@@ -1412,6 +1412,7 @@ def main():
                                 conn.commit()
                                 conn.close()
                                 st.success("Industry registered successfully!")
+                                refresh_page()
                             except sqlite3.IntegrityError:
                                 st.error("This email is already registered. Please use a different email.")
                             except Exception as e:
