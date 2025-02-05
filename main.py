@@ -47,7 +47,7 @@ def create_database_tables():
         c = conn.cursor()
         # Create tables if they do not exist
         c.execute('''
-                    CREATE TABLE IF NOT EXISTS user (
+                    CREATE TABLE IF NOT EXISTS user_as (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         email TEXT UNIQUE,
                         password TEXT
@@ -55,7 +55,7 @@ def create_database_tables():
                 ''')
         # Admin table for admin login
         c.execute('''
-                    CREATE TABLE IF NOT EXISTS admin (
+                    CREATE TABLE IF NOT EXISTS admin_as (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         username TEXT UNIQUE,
                         password TEXT
@@ -63,7 +63,7 @@ def create_database_tables():
                 ''')
         # Industry Table
         c.execute('''
-                    CREATE TABLE IF NOT EXISTS industry (
+                    CREATE TABLE IF NOT EXISTS industry_as (
                         ind_id INTEGER PRIMARY KEY AUTOINCREMENT,
                         user_id INTEGER UNIQUE,
                         user_id_ind TEXT UNIQUE,
@@ -89,7 +89,7 @@ def create_database_tables():
                 ''')
         # Stacks Table
         c.execute('''
-                    CREATE TABLE IF NOT EXISTS stacks (
+                    CREATE TABLE IF NOT EXISTS stacks_as (
                         stack_id INTEGER PRIMARY KEY AUTOINCREMENT,
                         user_id INTEGER,
                         user_id_ind TEXT,
@@ -122,7 +122,7 @@ def create_database_tables():
                 ''')
         # CEMS Instruments Table
         c.execute('''
-                    CREATE TABLE IF NOT EXISTS cems_instruments (
+                    CREATE TABLE IF NOT EXISTS cems_instruments_as (
                         cems_id INTEGER PRIMARY KEY AUTOINCREMENT,
                         stack_id INTEGER,
                         user_id_ind TEXT,
@@ -154,13 +154,107 @@ category = ["Aluminium", "Cement", "Chlor Alkali", "Copper", "Distillery", "Dye 
             "Food, Dairy & Beverages", "Common Hazardous Waste Treatment Facility",
             "Common Biomedical Waste Incinerators"]
 
-state_list = ["Bihar"]
+state_list = ["Andaman And Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Gujarat","Assam","Bihar","Chandigarh","Chhattisgarh","Kerala",
+              "Delhi","Goa","Haryana","Himachal Pradesh","Jammu And Kashmir","Maharashtra","Jharkhand","Karnataka","Ladakh","Lakshadweep",
+              "Madhya Pradesh","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Puducherry","Punjab","Rajasthan","Sikkim","Tamil Nadu",
+              "Telangana","The Dadra And Nagar Haveli And Daman And Diu","Tripura","Uttarakhand","Uttar Pradesh","West Bengal"]
 
-dist = ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar",
-        "Darbhanga", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur (Bhabua)", "Katihar", "Khagaria",
-        "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda",
-        "Nawada", "Pashchim Champaran", "Patna", "Purbi Champaran", "Purnia", "Rohtas", "Saharsa",
-        "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali"]
+dist_dict = {"Andaman And Nicobar Islands": ["Nicobars","North And Middle Andaman","South Andamans"],
+             "Andhra Pradesh": ["Alluri Sitharama Raju","Anakapalli","Ananthapuramu","Annamayya","Bapatla","Chittoor","Dr. B.R. Ambedkar Konaseema",
+                              "East Godavari","Eluru","Guntur","Kakinada","Krishna","Kurnool","Nandyal","Ntr","Palnadu","Parvathipuram Manyam",
+                              "Prakasam","Srikakulam","Sri Potti Sriramulu Nellore","Sri Sathya Sai","Tirupati","Visakhapatnam","Vizianagaram",
+                              "West Godavari","Y.S.R."],
+             "Arunachal Pradesh": ["Anjaw","Bichom","Changlang","Dibang Valley","East Kameng","East Siang","Kamle","Keyi Panyor","Kra Daadi",
+                                 "Kurung Kumey","Leparada","Lohit","Longding","Lower Dibang Valley","Lower Siang","Lower Subansiri","Namsai",
+                                 "Pakke Kessang","Papum Pare","Shi Yomi","Siang","Tawang","Tirap","Upper Siang","Upper Subansiri","West Kameng",
+                                 "West Siang"],
+             "Gujarat": ["Sabar Kantha","Ahmedabad","Amreli","Anand","Arvalli","Banas Kantha","Bharuch","Bhavnagar","Botad","Chhotaudepur","Dahod",
+                       "Dangs","Devbhumi Dwarka","Gandhinagar","Gir Somnath","Jamnagar","Junagadh","Kachchh","Kheda","Mahesana","Mahisagar",
+                       "Morbi","Narmada","Navsari","Panch Mahals","Patan","Porbandar","Rajkot","Surat","Surendranagar","Tapi","Vadodara",
+                       "Valsad"],
+            "Assam": ["Bajali","Baksa","Barpeta","Biswanath","Bongaigaon","Cachar","Charaideo","Chirang","Darrang","Dhemaji","Dhubri","Dibrugarh",
+                     "Dima Hasao","Goalpara","Golaghat","Hailakandi","Hojai","Jorhat","Kamrup","Kamrup Metro","Karbi Anglong","Karimganj",
+                     "Kokrajhar","Lakhimpur","Majuli","Marigaon","Nagaon","Nalbari","Sivasagar","Sonitpur","South Salmara Mancachar",
+                     "Tamulpur","Tinsukia","Udalguri","West Karbi Anglong"],
+             "Bihar": ["Araria","Arwal","Aurangabad","Banka","Begusarai","Bhagalpur","Bhojpur","Buxar","Darbhanga","Gaya","Gopalganj","Jamui",
+                     "Jehanabad","Kaimur (Bhabua)","Katihar","Khagaria","Kishanganj","Lakhisarai","Madhepura","Madhubani","Munger","Muzaffarpur",
+                     "Nalanda","Nawada","Pashchim Champaran","Patna","Purbi Champaran","Purnia","Rohtas","Saharsa","Samastipur","Saran",
+                     "Sheikhpura","Sheohar","Sitamarhi","Siwan","Supaul","Vaishali"],
+             "Chandigarh": ["Chandigarh"],
+             "Chhattisgarh": ["Balod","Balodabazar-Bhatapara","Balrampur-Ramanujganj","Bastar","Bemetara","Bijapur","Bilaspur",
+                            "Dakshin Bastar Dantewada","Dhamtari","Durg","Gariyaband","Gaurela-Pendra-Marwahi","Janjgir-Champa","Jashpur",
+                            "Kabeerdham","Khairagarh-Chhuikhadan-Gandai","Kondagaon","Korba","Korea","Mahasamund",
+                            "Manendragarh-Chirmiri-Bharatpur(M C B)","Mohla-Manpur-Ambagarh Chouki","Mungeli","Narayanpur","Raigarh","Raipur",
+                            "Rajnandgaon","Sakti","Sarangarh-Bilaigarh","Sukma","Surajpur","Surguja","Uttar Bastar Kanker"],
+             "Kerala": ["Malappuram","Palakkad","Alappuzha","Ernakulam","Idukki","Kannur","Kasaragod","Kollam","Kottayam","Kozhikode",
+                      "Pathanamthitta","Thiruvananthapuram","Thrissur","Wayanad"],
+             "Delhi": ["Central","East","New Delhi","North","North East","North West","Shahdara","South","South East","South West","West"],
+             "Goa": ["North Goa","South Goa"],
+             "Haryana": ["Ambala","Bhiwani","Charkhi Dadri","Faridabad","Fatehabad","Gurugram","Hisar","Jhajjar","Jind","Kaithal","Karnal",
+                       "Kurukshetra","Mahendragarh","Nuh","Palwal","Panchkula","Panipat","Rewari","Rohtak","Sirsa","Sonipat","Yamunanagar"],
+             "Himachal Pradesh": ["Bilaspur","Chamba","Hamirpur","Kangra","Kinnaur","Kullu","Lahaul And Spiti","Mandi","Shimla","Sirmaur","Solan","Una"],
+             "Jammu And Kashmir": ["Anantnag","Bandipora","Baramulla","Budgam","Doda","Ganderbal","Jammu","Kathua","Kishtwar","Kulgam","Kupwara",
+                                 "Poonch","Pulwama","Rajouri","Ramban","Reasi","Samba","Shopian","Srinagar","Udhampur"],
+             "Maharashtra": ["Akola","Ahilyanagar","Amravati","Beed","Bhandara","Buldhana","Chandrapur","Chhatrapati Sambhajinagar","Dharashiv","Dhule",
+                           "Gadchiroli","Gondia","Hingoli","Jalgaon","Jalna","Kolhapur","Latur","Mumbai","Mumbai Suburban","Nagpur","Nanded","Nandurbar",
+                           "Nashik","Palghar","Parbhani","Pune","Raigad","Ratnagiri","Sangli","Satara","Sindhudurg","Solapur","Thane","Wardha","Washim",
+                           "Yavatmal"],
+             "Jharkhand": ["Bokaro","Chatra","Deoghar","Dhanbad","Dumka","East Singhbum","Garhwa","Giridih","Godda","Gumla","Hazaribagh","Jamtara",
+                         "Khunti","Koderma","Latehar","Lohardaga","Pakur","Palamu","Ramgarh","Ranchi","Sahebganj","Saraikela Kharsawan","Simdega",
+                         "West Singhbhum"],
+             "Karnataka": ["Bagalkote","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban","Bidar","Chamarajanagar","Chikkaballapura","Chikkamagaluru"
+                         ,"Chitradurga","Dakshina Kannada","Davanagere","Dharwad","Gadag","Hassan","Haveri","Kalaburagi","Kodagu","Kolar","Koppal",
+                         "Mandya","Mysuru","Raichur","Ramanagara","Shivamogga","Tumakuru","Udupi","Uttara Kannada","Vijayanagara","Vijayapura","Yadgir"],
+             "Ladakh": ["Kargil","Leh Ladakh"],
+             "Lakshadweep": ["Lakshadweep District"],
+             "Madhya Pradesh": ["Agar-Malwa","Alirajpur","Anuppur","Ashoknagar","Balaghat","Barwani","Betul","Bhind","Bhopal","Burhanpur","Chhatarpur",
+                              "Chhindwara","Damoh","Datia","Dewas","Dhar","Dindori","Guna","Gwalior","Harda","Indore","Jabalpur","Jhabua","Katni",
+                              "Khandwa (East Nimar)","Khargone (West Nimar)","Maihar","Mandla","Mandsaur","MAUGANJ","Morena","Narmadapuram","Narsimhapur",
+                              "Neemuch","Niwari","Pandhurna","Panna","Raisen","Rajgarh","Ratlam","Rewa","Sagar","Satna","Sehore","Seoni","Shahdol",
+                              "Shajapur","Sheopur","Shivpuri","Sidhi","Singrauli","Tikamgarh","Ujjain","Umaria","Vidisha"],
+             "Manipur": ["Bishnupur","Chandel","Churachandpur","Imphal East","Imphal West","Jiribam","Kakching","Kamjong","Kangpokpi","Noney","Pherzawl",
+                        "Senapati","Tamenglong","Tengnoupal","Thoubal","Ukhrul"],
+             "Meghalaya": ["Eastern West Khasi Hills","East Garo Hills","East Jaintia Hills","East Khasi Hills","North Garo Hills","Ri Bhoi",
+                         "South Garo Hills","South West Garo Hills","South West Khasi Hills","West Garo Hills","West Jaintia Hills","West Khasi Hills"],
+             "Mizoram": ["Aizawl","Champhai","Hnahthial","Khawzawl","Kolasib","Lawngtlai","Lunglei","Mamit","Saitual","Serchhip","Siaha"],
+             "Nagaland": ["Chumoukedima","Dimapur","Kiphire","Kohima","Longleng","Mokokchung","Mon","Niuland","Noklak","Peren","Phek","Shamator","Tseminyu",
+                        "Tuensang","Wokha","Zunheboto"],
+             "Odisha": ["Anugul","Balangir","Baleshwar","Bargarh","Bhadrak","Boudh","Cuttack","Deogarh","Dhenkanal","Gajapati","Ganjam","Jagatsinghapur",
+                      "Jajapur","Jharsuguda","Kalahandi","Kandhamal","Kendrapara","Kendujhar","Khordha","Koraput","Malkangiri","Mayurbhanj","Nabarangpur",
+                      "Nayagarh","Nuapada","Puri","Rayagada","Sambalpur","Sonepur","Sundargarh"],
+             "Puducherry": ["Karaikal","Puducherry"],
+             "Punjab": ["Amritsar","Barnala","Bathinda","Faridkot","Fatehgarh Sahib","Fazilka","Ferozepur","Gurdaspur","Hoshiarpur","Jalandhar",
+                      "Kapurthala","Ludhiana","Malerkotla","Mansa","Moga","Pathankot","Patiala","Rupnagar","Sangrur","S.A.S Nagar",
+                      "Shahid Bhagat Singh Nagar","Sri Muktsar Sahib","Tarn Taran"],
+             "Rajasthan": ["Ajmer","Alwar","Anupgarh","Balotra","Banswara","Baran","Barmer","Beawar","Bharatpur","Bhilwara","Bikaner","Bundi",
+                         "Chittorgarh","Churu","Dausa","Deeg","Dholpur","Didwana-Kuchaman","Dudu","Dungarpur","Ganganagar","Gangapurcity","Hanumangarh",
+                         "Jaipur","Jaipur (Gramin)","Jaisalmer","Jalore","Jhalawar","Jhunjhunu","Jodhpur","Jodhpur (Gramin)","Karauli","Kekri",
+                         "Khairthal-Tijara","Kota","Kotputli-Behror","Nagaur","Neem Ka Thana","Pali","Phalodi","Pratapgarh","Rajsamand","Salumbar",
+                         "Sanchore","Sawai Madhopur","Shahpura","Sikar","Sirohi","Tonk","Udaipur"],
+             "Sikkim": ["Gangtok","Gyalshing","Mangan","Namchi","Pakyong","Soreng"],
+             "Tamil Nadu": ["Ariyalur","Chengalpattu","Chennai","Coimbatore","Cuddalore","Dharmapuri","Dindigul","Erode","Kallakurichi","Kancheepuram",
+                          "Kanniyakumari","Karur","Krishnagiri","Madurai","Mayiladuthurai","Nagapattinam","Namakkal","Perambalur","Pudukkottai",
+                          "Ramanathapuram","Ranipet","Salem","Sivaganga","Tenkasi","Thanjavur","Theni","The Nilgiris","Thiruvallur","Thiruvarur",
+                          "Thoothukkudi","Tiruchirappalli","Tirunelveli","Tirupathur","Tiruppur","Tiruvannamalai","Vellore","Viluppuram","Virudhunagar"],
+             "Telangana": ["Adilabad","Bhadradri Kothagudem","Hanumakonda","Hyderabad","Jagitial","Jangoan","Jayashankar Bhupalapally",
+                         "Jogulamba Gadwal","Kamareddy","Karimnagar","Khammam","Kumuram Bheem Asifabad","Mahabubabad","Mahabubnagar",
+                         "Mancherial","Medak","Medchal Malkajgiri","Mulugu","Nagarkurnool","Nalgonda","Narayanpet","Nirmal","Nizamabad",
+                         "Peddapalli","Rajanna Sircilla","Ranga Reddy","Sangareddy","Siddipet","Suryapet","Vikarabad","Wanaparthy","Warangal",
+                         "Yadadri Bhuvanagiri"],
+            "The Dadra And Nagar Haveli And Daman And Diu": ["Dadra And Nagar Haveli","Daman","Diu"],
+            "Tripura": ["Dhalai","Gomati","Khowai","North Tripura","Sepahijala","South Tripura","Unakoti","West Tripura"],
+            "Uttarakhand": ["Almora","Bageshwar","Chamoli","Champawat","Dehradun","Haridwar","Nainital","Pauri Garhwal","Pithoragarh",
+                          "Rudra Prayag","Tehri Garhwal","Udam Singh Nagar","Uttar Kashi"],
+            "Uttar Pradesh": ["Agra","Aligarh","Ambedkar Nagar","Amethi","Amroha","Auraiya","Ayodhya","Azamgarh","Baghpat","Bahraich","Ballia",
+                            "Balrampur","Banda","Bara Banki","Bareilly","Basti","Bhadohi","Bijnor","Budaun","Bulandshahr","Chandauli","Chitrakoot",
+                            "Deoria","Etah","Etawah","Farrukhabad","Fatehpur","Firozabad","Gautam Buddha Nagar","Ghaziabad","Ghazipur","Gonda",
+                            "Gorakhpur","Hamirpur","Hapur","Hardoi","Hathras","Jalaun","Jaunpur","Jhansi","Kannauj","Kanpur Dehat","Kanpur Nagar",
+                            "Kasganj","Kaushambi","Kheri","Kushinagar","Lalitpur","Lucknow","Mahoba","Mahrajganj","Mainpuri","Mathura","Mau","Meerut",
+                            "Mirzapur","Moradabad","Muzaffarnagar","Pilibhit","Pratapgarh","Prayagraj","Rae Bareli","Rampur","Saharanpur","Sambhal",
+                            "Sant Kabir Nagar","Shahjahanpur","Shamli","Shrawasti","Siddharthnagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi"],
+            "West Bengal": ["Alipurduar","Bankura","Birbhum","Cooch Behar","Dakshin Dinajpur","Darjeeling","Hooghly","Howrah","Jalpaiguri","Jhargram",
+                          "Kalimpong","Kolkata","Malda","Murshidabad","Nadia","North 24 Parganas","Paschim Bardhaman","Paschim Medinipur","Purba Bardhaman",
+                          "Purba Medinipur","Purulia","South 24 Parganas","Uttar Dinajpur"],
 
 
 def refresh_page():
@@ -215,7 +309,7 @@ def admin_login_page():
     if login_button:
         with get_database_connection() as conn:
             c = conn.cursor()
-            c.execute("SELECT password FROM admin WHERE username = ?", (username,))
+            c.execute("SELECT password FROM admin_as WHERE username = ?", (username,))
             admin = c.fetchone()
             if admin and hash_password(password) == admin[0]:
                 st.success("Admin login successful!")
@@ -251,7 +345,7 @@ def display_all_details():
     # st.subheader("All User-Filled Industry Details")  # Display the heading once at the top
     with get_database_connection() as conn:
         c = conn.cursor()
-        c.execute("SELECT * FROM industry")
+        c.execute("SELECT * FROM industry_as")
         industries = c.fetchall()
 
         if industries:
@@ -308,15 +402,15 @@ def show_industry_details(ind_id):
             return pd.DataFrame(data, columns=columns) if data else None
 
     # Fetch Industry Details
-    industry_query = "SELECT * FROM industry WHERE ind_id = ?"
+    industry_query = "SELECT * FROM industry_as WHERE ind_id = ?"
     industry_data = fetch_data(industry_query, (ind_id,))
 
     # Fetch Stack Details
-    stack_query = "SELECT * FROM stacks WHERE user_id_ind = ?"
+    stack_query = "SELECT * FROM stacks_as WHERE user_id_ind = ?"
     stack_data = fetch_data(stack_query, (f"ind_{ind_id}",))
     #
     # Fetch CEMS Details
-    cems_query = "SELECT * FROM cems_instruments WHERE user_id_ind = ?"
+    cems_query = "SELECT * FROM cems_instruments_as WHERE user_id_ind = ?"
     cems_data = fetch_data(cems_query, (f"ind_{ind_id}",))
 
     # Display Industry Details
@@ -763,20 +857,20 @@ def fill_stacks(user_id):
     """Form to fill stack details."""
     with get_database_connection() as conn:
         c = conn.cursor()
-        c.execute("SELECT num_stacks FROM industry WHERE user_id = ?", (user_id,))
+        c.execute("SELECT num_stacks FROM industry_as WHERE user_id = ?", (user_id,))
         total_stacks = c.fetchone()[0]
         # st.write(total_stacks)
         conn.commit()
 
         c = conn.cursor()
-        c.execute("SELECT COUNT(*) FROM stacks WHERE user_id = ?", (user_id,))
+        c.execute("SELECT COUNT(*) FROM stacks_as WHERE user_id = ?", (user_id,))
         result = c.fetchone()
         # st.write(result)
         completed_stacks = result[0] if result else 0  # Default to 0 if no stacks are completed
         conn.commit()
 
         # c = conn.cursor()
-        # c.execute("SELECT completed_stacks FROM industry WHERE user_id = ?", (user_id,))
+        # c.execute("SELECT completed_stacks FROM industry_as WHERE user_id = ?", (user_id,))
         # completed_stacks = c.fetchone()[0]
         # st.write(completed_stacks)
         # conn.commit()
@@ -936,7 +1030,7 @@ def fill_stacks(user_id):
             with get_database_connection() as conn:
                 c = conn.cursor()
                 c.execute(""" 
-                    INSERT INTO stacks (user_id, user_id_ind, stack_identity, process_attached, apcd_details, latitude,
+                    INSERT INTO stacks_as (user_id, user_id_ind, stack_identity, process_attached, apcd_details, latitude,
                      longitude, stack_condition, stack_shape, diameter, length, width, stack_material, stack_height, 
                      platform_height, platform_approachable, approaching_media, cems_installed, stack_params, 
                      duct_params, follows_formula, manual_port_installed, cems_below_manual, parameters)
@@ -950,7 +1044,7 @@ def fill_stacks(user_id):
                 conn.commit()
 
                 c.execute("""
-                        UPDATE stacks
+                        UPDATE stacks_as
                         SET number_params = 
                             CASE 
                                 WHEN parameters IS NULL OR parameters = '' THEN 0
@@ -962,7 +1056,7 @@ def fill_stacks(user_id):
 
                 # Increment the completed_stacks counter
                 c.execute("""
-                        UPDATE industry
+                        UPDATE industry_as
                         SET completed_stacks = completed_stacks + 1
                         WHERE user_id = ?
                     """, (user_id,))
@@ -983,7 +1077,7 @@ def fill_cems_details(user_id):
     # Retrieve stack details from the session or database
     with get_database_connection() as conn:
         c = conn.cursor()
-        c.execute("SELECT stack_id, process_attached, parameters FROM stacks WHERE user_id = ?", (user_id,))
+        c.execute("SELECT stack_id, process_attached, parameters FROM stacks_as WHERE user_id = ?", (user_id,))
         stack_details = c.fetchall()
 
         # st.write(stack_details)
@@ -1018,7 +1112,7 @@ def fill_cems_details(user_id):
     with get_database_connection() as conn:
         c = conn.cursor()
         c.execute("""
-            SELECT DISTINCT parameter FROM cems_instruments WHERE stack_id = ?
+            SELECT DISTINCT parameter FROM cems_instruments_as WHERE stack_id = ?
         """, (selected_stack_id,))
         filled_parameters = c.fetchall()
 
@@ -1122,7 +1216,7 @@ def fill_cems_details(user_id):
 
                 # Here, use the stack_id to associate the CEMS data with the correct stack
                 c.execute(""" 
-                    INSERT INTO cems_instruments (stack_id, user_id_ind, parameter, make, model, serial_number, emission_limit, 
+                    INSERT INTO cems_instruments_as (stack_id, user_id_ind, parameter, make, model, serial_number, emission_limit, 
                     measuring_range_low, measuring_range_high, certified, certification_agency, communication_protocol, 
                     measurement_method, technology, connected_bspcb, bspcb_url, cpcb_url, connected_cpcb)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -1135,7 +1229,7 @@ def fill_cems_details(user_id):
                 conn.commit()
 
                 c.execute("""
-                                        UPDATE stacks
+                                        UPDATE stacks_as
                                         SET completed_parameters = completed_parameters + 1
                                         WHERE stack_id = ?
                                     """, (selected_stack_id,))
@@ -1155,17 +1249,7 @@ def fill_cems_details(user_id):
             st.session_state[f"form_reset_{selected_stack_id}"] = False  # Prevent reset on error
 
 
-# Main Function
-def main():
-    """Main application logic."""
-    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
-    with col1:
-        st.image("bspcb.png")  # Display logo
-    # with col3:
-    #     st.markdown("<h4 style='text-align: center; color: black;'>Industry Registration Portal</h4>", unsafe_allow_html=True)# Display logo
-    with col5:
-        st.image("CEEW.png")  # Display logo
-    
+# Main Function    
     hide_streamlit_style = """
     <style>
         /* Hide the Streamlit header and hamburger menu */
@@ -1237,7 +1321,12 @@ def main():
                         industry_name = st.text_input("Industry Name")
                         address = st.text_input("Address")
                         state = st.selectbox("State", options=state_list, placeholder="Select State", index=None)
-                        district = st.selectbox("District", options=dist, placeholder="Select District", index=None)
+                        if 'district_list' not in st.session_state:
+                            st.session_state.district_list = []
+                        if st.form_submit_button("Show Districts"):
+                            st.session_state.district_list = dist_dict.get(state, [])
+                        if st.session_state.district_list:
+                            district = st.selectbox("Select District", st.session_state.district_list, index=None)
                         production_capacity = st.text_input("Production Capacity")
                         num_stacks = st.number_input("Number of Stacks", min_value=1)
                         industry_environment_head = st.text_input("Environment Department Head")
@@ -1277,17 +1366,17 @@ def main():
                             with get_database_connection() as conn:
                                 c = conn.cursor()
                                 # Check email uniqueness
-                                c.execute("SELECT COUNT(*) FROM user WHERE email = ?", (email,))
+                                c.execute("SELECT COUNT(*) FROM user_as WHERE email = ?", (email,))
                                 if c.fetchone()[0] > 0:
                                     return "Email already exists."
                                 c = conn.cursor()
                                 # Check state_ocmms_id uniqueness
-                                c.execute("SELECT COUNT(*) FROM industry WHERE state_ocmms_id = ?", (state_ocmms_id,))
+                                c.execute("SELECT COUNT(*) FROM industry_as WHERE state_ocmms_id = ?", (state_ocmms_id,))
                                 if c.fetchone()[0] > 0:
                                     return "State OCMMS ID already exists."
                                 c = conn.cursor()
                                 # Check state_ocmms_id uniqueness
-                                c.execute("SELECT COUNT(*) FROM industry WHERE cpcb_ind_code = ?", (cpcb_ind_code,))
+                                c.execute("SELECT COUNT(*) FROM industry_as WHERE cpcb_ind_code = ?", (cpcb_ind_code,))
                                 if c.fetchone()[0] > 0:
                                     return "CPCB Industry code already exists."
                             return None  # Both are unique
@@ -1304,13 +1393,13 @@ def main():
 
                                 # Insert user (with email used for login)
                                 hashed_password = hash_password(password)
-                                c.execute("INSERT INTO user (email, password) VALUES (?, ?)", (email, hashed_password))
+                                c.execute("INSERT INTO user_as (email, password) VALUES (?, ?)", (email, hashed_password))
                                 user_id = c.lastrowid
                                 conn.commit()
                                 user_id_str = f"ind_{user_id}"  # Format user_id like 'ind_1', 'ind_2', etc.
 
                                 # Insert industry
-                                c.execute('''INSERT INTO industry (user_id, user_id_ind, industry_category, 
+                                c.execute('''INSERT INTO industry_as (user_id, user_id_ind, industry_category, 
                                 state_ocmms_id, cpcb_ind_code, industry_name, address, state, district, production_capacity, 
                                 num_stacks, industry_environment_head, env_phone, industry_instrument_head, inst_phone,
                                  concerned_person_cems, cems_phone, industry_representative_email)
@@ -1342,7 +1431,7 @@ def main():
                             c = conn.cursor()
 
                             # Verify email and password
-                            c.execute("SELECT id, password FROM user WHERE email = ?", (email,))
+                            c.execute("SELECT id, password FROM user_as WHERE email = ?", (email,))
                             user = c.fetchone()
 
                             if user and hash_password(password) == user[1]:
