@@ -1451,6 +1451,7 @@ def main():
                                 conn.close()
                                 st.success("Industry registered successfully!")
                                 refresh_page()
+                                redirect_login()
                                 st.session_state["current_page"] = "Login"
                             except sqlite3.IntegrityError:
                                 st.error("This email is already registered. Please use a different email.")
