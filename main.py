@@ -1413,6 +1413,8 @@ def main():
                                 conn.close()
 
                                 st.success("Industry registered successfully!")
+                                st.session_state["current_page"] = "Login"
+                                st.rerun()
                             except sqlite3.IntegrityError:
                                 st.error("This email is already registered. Please use a different email.")
                             except Exception as e:
