@@ -264,8 +264,46 @@ def refresh_page():
 
 
 st.set_page_config(layout="wide")
+def redirect_login():
+    if not st.session_state["logged_in"] and not st.session_state["admin_logged_in"]:
+            st.sidebar.title("User Login")
+            navigation = ["Industry Login/New Industry Registration","Admin Login"]
+            selected_page = st.sidebar.selectbox("Select User Type", navigation)
+    
+            
+    
+            # Admin Login and Dashboard
+            if selected_page == "Industry Login/New Industry Registration":
+                st.subheader("Login")
 
+                    # Login form
+                    email = st.text_input("Industry Representative Email Id")
+                    password = st.text_input("Password", type="password")
+                    login_button = st.button("Login")
 
+                    if login_button:
+                        try:
+                            conn = get_database_connection()
+                            c = conn.cursor()
+
+                            # Verify email and password
+                            c.execute("SELECT id, password FROM user_as WHERE email = ?", (email,))
+                            user = c.fetchone()
+
+                            if user and hash_password(password) == user[1]:
+                                st.success("Login successful!")
+                                st.session_state["logged_in"] = True
+                                st.session_state["user_id"] = user[0]
+                                st.session_state["current_page"] = "Industry Details"
+                                st.rerun()
+                                st.write(f"User ID in session state: {st.session_state['user_id']}")  # Debugging
+
+                            else:
+                                st.error("Invalid email or password.")
+                            conn.close()
+                        except Exception as e:
+                            st.error(f"An error occurred: {e}")
+                
 def sidebar_forms(user_id):
     """Function to render the sidebar after login."""
     st.sidebar.title("Navigation")
