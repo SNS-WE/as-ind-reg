@@ -1450,7 +1450,6 @@ def main():
                                 conn.commit()
                                 conn.close()
                                 st.success("Industry registered successfully!")
-                                refresh_page()
                                 redirect_login()
                                 st.session_state["current_page"] = "Login"
                             except sqlite3.IntegrityError:
