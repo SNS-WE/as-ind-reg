@@ -276,7 +276,8 @@ def sidebar_forms(user_id):
 
     # Conditional rendering of sidebar options based on login status
     if st.session_state.get("logged_in", False):
-        menu = ["Industry Dashboard", "Stack Details", "CEMS Details","CEMS Suitability", "Logout"]
+        menu = ["Industry Dashboard", "Stack Details", "CEMS Details", "Logout"] 
+        #CEMS Suitability is removed. will be added latter.
     else:
         menu = ["Login", "Register Industry"]
 
