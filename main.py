@@ -542,8 +542,8 @@ def show_industry_details(ind_id):
                         "Communication Protocol": cems['communication_protocol'],
                         "Measurement Method": cems['measurement_method'],
                         "Technology": cems['technology'],
-                        "Connected to BSPCB?": cems['connected_bspcb'],
-                        "BSPCB URL": cems['bspcb_url'],
+                        "Connected to SPCB?": cems['connected_bspcb'],
+                        "SPCB URL": cems['bspcb_url'],
                         "Connected to CPCB?": cems['connected_cpcb'],
                         "CPCB URL": cems['cpcb_url'],
                     }
@@ -799,8 +799,8 @@ def show_industry_dashboard(user_id):
                         "Communication Protocol": cems['communication_protocol'],
                         "Measurement Method": cems['measurement_method'],
                         "Technology": cems['technology'],
-                        "Connected to BSPCB?": cems['connected_bspcb'],
-                        "BSPCB URL": cems['bspcb_url'],
+                        "Connected to SPCB?": cems['connected_bspcb'],
+                        "SPCB URL": cems['bspcb_url'],
                         "Connected to CPCB?": cems['connected_cpcb'],
                         "CPCB URL": cems['cpcb_url'],
                     }
@@ -1147,9 +1147,9 @@ def fill_cems_details(user_id):
         communication_protocol = st.selectbox("Communication Protocol", ["4-20 mA", "RS-485", "RS-232"], index=None)
         measurement_method = st.selectbox("Measurement Method", ["In-situ", "Extractive"], index=None)
         technology = st.text_input("Technology")
-        connected_bspcb = st.selectbox("Connected to BSPCB?", ["Yes", "No"])
+        connected_bspcb = st.selectbox("Connected to SPCB?", ["Yes", "No"])
         if connected_bspcb == "Yes":
-            bspcb_url = st.text_input("BSPCB URL")
+            bspcb_url = st.text_input("SPCB URL")
         else:
             bspcb_url = None
         connected_cpcb = st.selectbox("Connected to CPCB?", ["Yes", "No"])
@@ -1181,7 +1181,7 @@ def fill_cems_details(user_id):
 
         # Validate URLs if needed
         if connected_bspcb == "Yes" and not bspcb_url:
-            st.error("Kindly fill the BSPCB URL.")
+            st.error("Kindly fill the SPCB URL.")
             return
 
         if connected_cpcb == "Yes" and not cpcb_url:
@@ -1292,7 +1292,7 @@ def main():
     # Show navigation only before login
     if not st.session_state["logged_in"] and not st.session_state["admin_logged_in"]:
         st.sidebar.title("User Login")
-        navigation = ["Admin Login", "Industry Login/New Industry Registration"]
+        navigation = ["Industry Login/New Industry Registration", "Admin Login"]
         selected_page = st.sidebar.selectbox("Select User Type", navigation)
 
         
