@@ -658,7 +658,7 @@ def show_industry_dashboard(user_id):
             return pd.DataFrame(data, columns=columns) if data else None
 
     # Fetch Industry Details
-    industry_query = "SELECT * FROM industry WHERE user_id = ?"
+    industry_query = "SELECT * FROM industry_as WHERE user_id = ?"
     industry_data = fetch_data(industry_query, (user_id,))
 
     # Fetch Stack Details
