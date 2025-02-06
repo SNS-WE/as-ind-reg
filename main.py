@@ -1434,7 +1434,7 @@ def main():
                             c.execute("SELECT id, password FROM user_as WHERE email = ?", (email,))
                             user = c.fetchone()
 
-                            if user and hash_password(password) == user[1]:
+                            if user and password == user[1]:
                                 st.success("Login successful!")
                                 st.session_state["logged_in"] = True
                                 st.session_state["user_id"] = user[0]
